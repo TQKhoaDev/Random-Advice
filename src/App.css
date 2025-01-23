@@ -1,38 +1,334 @@
-.App {
-  text-align: center;
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f8;
+  color: #333;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 20px;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.card, .favorites {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.card {
+  text-align: center;
+}
+
+.card h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #0077b6;
+}
+
+.card p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Button Styles */
+button {
+  background-color: #0077b6;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button i {
+  margin-right: 5px;
+}
+
+button:active {
+  background-color: #004d6b;
+}
+
+button.liked, button.disliked {
+  background-color: #ff6347;
+}
+
+/* Favorites Section */
+.favorites {
+  text-align: left;
+  position: relative;
+}
+
+.favorites h2 {
+  color: #0077b6;
+  font-size: 25px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Căn giữa nội dung */
+
+}
+
+.favorites input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.favorites ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.favorites li {
+  background-color: #e9f5fc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.favorites li:hover {
+  background-color: #bee1ff;
+}
+
+.favorites li button {
+  background-color: #ff6347;
+  font-size: 14px;
+  border: none;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  right: 10px;
+}
+
+.favorites li:hover button {
+  display: inline-block;
+}
+
+/* Popup Styles */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 10px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.popup.show {
+  opacity: 1;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0077b6;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .App {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .favorites,
+  .card {
+    width: 90%;
+  }
+}
+
+.toggle-favorites {
+  background-color: #0077b6;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-favorites:hover {
+  background-color: #005f8d;
+}
+
+.button-group {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 10px;
+}
+
+.add-favorite {
+  background: #ffffff;
+  border: none;
+  color: #0077b6;
+  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20rem;
+  margin-top: -10px; 
+   margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+}
+.btn_add{
+  margin-bottom: 15px;
+}
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input-group button {
+  padding: 10px 15px;
+  background-color: #0077b6;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-group button:hover {
+  background-color: #005f8d;
+}
+
+/* Close Button */
+.close-favorites {
+  position: absolute;
+  top: -10px;
+  right: -0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #0077b6;
+  transition: color 0.3s ease;
+}
+
+.close-favorites:hover {
+  color: #005f8d;
+}
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+.pagination {
+  display: flex;
+  justify-content: center; /* Căn giữa các nút */
+  margin-top: 10px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #0077b6;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.pagination button:disabled {
+  background-color: #d0d0d0;
+  cursor: not-allowed;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.input-group {
+  display: flex;
+  align-items: center; /* Căn chỉnh nút và input */
+}
+
+.input-group input {
+  flex: 1; /* Đảm bảo input chiếm hết không gian còn lại */
+  margin-right: 5px;
 }
